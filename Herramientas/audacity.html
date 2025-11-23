@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos Audacity - [EquipoGenerico]</title>
+    <link rel="stylesheet" href="../CSS/BodioEstilo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="page-audacity">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../BodioIndex.html" class="logo">[EquipoGenerico]</a>
+        </div>
+    </nav>
+
+    <header class="page-hero hero-audacity">
+        <div class="hero-content">
+            <h1><i class="fas fa-volume-up"></i> Proyectos con Audacity</h1>
+            <p>Producción y edición de audio profesional</p>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <a href="../BodioIndex.html#tools" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver a Herramientas
+        </a>
+
+        <article class="project-card">
+            <h2>La Creación de Radio Virus</h2>
+            <p>Transformamos ideas en contenido auditivo de calidad profesional usando Audacity.</p>
+            
+            <div class="process-grid">
+                <div class="process-step">
+                    <span class="step-badge">1</span>
+                    <h4>Grabación</h4>
+                    <p>Captura multipista</p>
+                </div>
+                <div class="process-step">
+                    <span class="step-badge">2</span>
+                    <h4>Edición</h4>
+                    <p>Limpieza y tiempos</p>
+                </div>
+                <div class="process-step">
+                    <span class="step-badge">3</span>
+                    <h4>Mezcla</h4>
+                    <p>Balance y efectos</p>
+                </div>
+                <div class="process-step">
+                    <span class="step-badge">4</span>
+                    <h4>Masterización</h4>
+                    <p>Exportación final</p>
+                </div>
+            </div>
+
+            <div class="content-split">
+                <div class="image-wrapper">
+                    <h3>Interfaz de Trabajo</h3>
+                    <img src="../Imagenes/Herramientas/Audacity_Captura.png" alt="Interfaz Audacity" class="img-responsive rounded shadow">
+                </div>
+                <div class="text-wrapper">
+                    <h3>Técnicas Avanzadas</h3>
+                    <ul class="feature-list">
+                        <li><strong>Noise Reduction:</strong> Limpieza espectral.</li>
+                        <li><strong>Compresión Dinámica:</strong> Nivelación de voz.</li>
+                        <li><strong>EQ Paramétrico:</strong> Claridad tonal.</li>
+                        <li><strong>Edición No Destructiva:</strong> Flujo seguro.</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <section class="audio-player-component" aria-label="Reproductor de audio">
+            <h2>Radio Virus - Master Final</h2>
+            
+            <div class="player-interface">
+                <button id="playButtonAudacity" class="btn-play" aria-label="Reproducir">▶</button>
+                <div class="player-controls">
+                    <div class="volume-wrapper">
+                        <i class="fas fa-volume-up"></i>
+                        <input type="range" min="0" max="100" value="50" id="volumeSliderAudacity" aria-label="Volumen">
+                    </div>
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="audioVisualizer" class="visualizer-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 [EquipoGenerico]</p>
+    </footer>
+    
+    <script src="../JS/BodrioScript.js"></script>
+</body>
+</html>
