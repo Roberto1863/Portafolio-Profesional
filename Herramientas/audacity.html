@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyectos Audacity - [EquipoGenerico]</title>
+    <title>Proyectos Audacity - Generic Solutions Inc.</title>
     <link rel="stylesheet" href="../CSS/BodioEstilo.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="page-audacity">
     <nav class="navbar">
         <div class="nav-container">
-            <a href="../index.html" class="logo">[EquipoGenerico]</a>
+            <a href="../index.html" class="logo">Generic Solutions Inc.</a>
         </div>
     </nav>
 
@@ -70,28 +70,31 @@
             </div>
         </article>
 
-        <section class="audio-player-component" aria-label="Reproductor de audio">
-            <h2>Radio Virus - Master Final</h2>
+        <section>
+        <div class="audio-showcase">
+            <h2>Radio Virus - Edición Especial Audacity</h2>
+            <p>Versión remasterizada con mejoras de audio exclusivas.</p>
             
-            <div class="player-interface">
-                <button id="playButtonAudacity" class="btn-play" aria-label="Reproducir">▶</button>
-                <div class="player-controls">
-                    <div class="volume-wrapper">
-                        <i class="fas fa-volume-up"></i>
-                        <input type="range" min="0" max="100" value="50" id="volumeSliderAudacity" aria-label="Volumen">
-                    </div>
-                    <div class="time-display">
-                        <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
-                    </div>
+            <div class="audio-controls">
+                <button class="play-button-audacity" id="playButtonAudacity" aria-label="Reproducir audio">▶</button>
+                <div class="volume-control-audacity">
+                    <i class="fas fa-volume-up"></i>
+                    <input type="range" min="0" max="100" value="50" class="volume-slider-audacity" id="volumeSliderAudacity" aria-label="Volumen">
                 </div>
             </div>
             
-            <div id="audioVisualizer" class="visualizer-container"></div>
-        </section>
+            <div class="audio-visualizer" id="audioVisualizer"></div>
+            
+            <div class="audio-info">
+                <p><strong>Duración:</strong> <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span></p>
+                <p><strong>Formato:</strong> MP3 320kbps | <strong>Tamaño:</strong> 15.2 MB</p>
+            </div>
+        </div>
+    </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 [EquipoGenerico]</p>
+        <p>&copy; 2025 Generic Solutions Inc.</p>
     </footer>
     
     <script src="../JS/BodrioScript.js"></script>
