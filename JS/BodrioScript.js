@@ -1,52 +1,58 @@
-/**
- * BodrioScript.js - Refactorizado
- * Estándares: ES6+, DRY, Separation of Concerns
- */
-
 document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initAudioPlayer();
     initModals();
     initAnimations();
+    
+    // Inicialización específica de páginas
+    const isAudacityPage = document.querySelector('.page-audacity');
+    const isFilmoraPage = document.querySelector('.page-filmora');
+    
+    if (isAudacityPage) initAudacityPlayer();
+    if (isFilmoraPage) initFilmoraPlayer();
 });
 
-/* =========================================
-   DATA MODELS (Separación de Datos)
-   ========================================= */
 const TEAM_DATA = {
     1: {
-        name: 'Integrante 1',
+        name: 'Carlos Guevara',
         role: 'Líder Creativo & Diseñador Principal',
-        bio: 'Especialista en diseño gráfico y dirección creativa. Con más de 5 años de experiencia en diseño UI/UX y branding.',
-        skills: ['Diseño UI/UX', 'Dirección Creativa', 'Branding'],
-        email: 'viru@bodrio.com'
+        bio: 'Participó en la elaboración de la documentación del proyecto, organizando y explicando los apartados necesarios para presentar el trabajo de manera clara. También aportó al diseño general del proyecto con ideas visuales y de estilo..',
+        skills: ['Documentación', 'Organización de Contenido', 'Organización de Información'],
+        email: 'gf0347042025@unab.edu.sv'
     },
     2: {
-        name: 'Integrante 2',
-        role: 'Productor Audiovisual & Editor',
-        bio: 'Especialista en producción de video y edición. Encargado de dar vida a nuestros proyectos multimedia.',
-        skills: ['Edición de Video', 'Producción Audiovisual', 'Postproducción'],
-        email: 'Monchito@bodrio.com'
+        name: 'Sebastián Medrano',
+        role: 'Documentación',
+        bio: 'Contribuyó al desarrollo de la documentación del proyecto junto con Carlos. Su trabajo se enfocó en redactar, estructurar y revisar la información para que fuera coherente y fácil de comprender.',
+        skills: ['Redacción', 'Documentación', 'Postproducción'],
+        email: 'gm0623042025@unab.edu.sv'
     },
     3: {
-        name: 'Integrante 3',
+        name: 'Ramón Garmendia',
         role: 'Desarrollador & Especialista en Audio',
-        bio: 'Encargado del desarrollo web y producción de audio. Creador de la mítica Radio Virus.',
-        skills: ['Desarrollo Web', 'Producción de Audio', 'JavaScript'],
-        email: 'bodrio@bodrio.com'
+        bio: 'Trabajó junto con Luis en el diseño visual del sitio, aportando ideas para la apariencia, estilo gráfico y estructura visual de la página.',
+        skills: ['Diseño Gráfico', 'Composición Visual', 'UI Layout'],
+        email: 'gh0476042025@unab.edu.sv'
     },
     4: {
-        name: 'Integrante 4',
-        role: 'Diseñador Gráfico & Marketing',
-        bio: 'Creativo apasionado por el diseño gráfico y estrategias de marketing digital.',
-        skills: ['Diseño Gráfico', 'Marketing Digital', 'Branding', 'Canva'],
-        email: 'design@bodioviru.com'
+        name: 'Herber Chicas',
+        role: 'Desarrollador Frontend – Estructura',
+        bio: 'Encargado de crear la estructura base del proyecto. Realizó el esqueleto HTML y organizó la arquitectura del sitio para que el resto del desarrollo pudiera avanzar correctamente.',
+        skills: ['Estructura Web', 'Organización de Proyectos', 'JavaScript Básico'],
+        email: 'ch0304042025@unab.edu.sv'
     },
     5: {
+        name: 'Luis Serabia',
+        role: 'Diseñador Gráfico & Marketing',
+        bio: 'Colaboró en el diseño visual del proyecto junto a Ramon, trabajando en colores, distribución, tipografía y experiencia de usuario.',
+        skills: ['Diseño Gráfico', 'Identidad Visual', 'Branding', 'Canva'],
+        email: 'sz0356042025@unab.edu.sv'
+    },
+    6: {
         name: 'Roberto García',
         role: 'Desarrollador Backend',
-        bio: 'Especialista en crear códigos que funcionan. Utiliza código limpio con funciones creativas.',
-        skills: ['JavaScript', 'HTML5', 'TypeScript', 'Testing'],
+        bio: 'Se encargó de completar la parte funcional del sitio. Usó la estructura creada para implementar el resto del HTML, detalles visuales y funciones en JavaScript.',
+        skills: ['JavaScript', 'HTML5', 'Optimización Frontend', 'Funcionalidad Web'],
         email: 'gm0723042025@unab.edu.sv'
     }
 };
@@ -86,9 +92,6 @@ const PROJECT_DATA = {
     }
 };
 
-/* =========================================
-   NAVIGATION & UI
-   ========================================= */
 function initNavigation() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
@@ -98,7 +101,7 @@ function initNavigation() {
 
     hamburger.addEventListener('click', () => {
         const isActive = navMenu.classList.toggle('active');
-        hamburger.classList.toggle('active', isActive); // Usar CSS para la animación del icono
+        hamburger.classList.toggle('active', isActive);
         hamburger.setAttribute('aria-expanded', isActive);
     });
 
@@ -109,7 +112,6 @@ function initNavigation() {
         });
     });
 
-    // Smooth Scroll mejorado
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
@@ -121,79 +123,76 @@ function initNavigation() {
     });
 }
 
-/* =========================================
-   AUDIO PLAYER (Optimized)
-   ========================================= */
+/* --- REPRODUCTOR DE AUDIO (Blindado) --- */
 function initAudioPlayer() {
     const playBtn = document.getElementById('playButtonAudacity');
-    const volumeSlider = document.getElementById('volumeSliderAudacity');
     const visualizer = document.getElementById('audioVisualizer');
-    const currentEl = document.getElementById('currentTime');
-    const totalEl = document.getElementById('totalTime');
     
-    // Nota: GitHub Pages suele servir desde root, ajusta esta ruta si es necesario.
-    // Mejor práctica: Ruta relativa simple.
-    const audio = new Audio('Audio/Proyecto_Radio.mp3'); 
+    // Si no existe el botón en esta página, salimos sin error
+    if (!playBtn) return;
+
+    // Detectar ruta correcta del audio (Index vs Subcarpeta)
+    // Truco: probamos crear el audio, si estamos en subcarpeta añadimos '../'
+    const isSubPage = window.location.pathname.includes('Herramientas');
+    const audioPath = isSubPage ? '../Audio/Proyecto_Radio.mp3' : 'Audio/Proyecto_Radio.mp3';
+    
+    const audio = new Audio(audioPath);
     audio.loop = true;
     audio.volume = 0.5;
 
+    // Slider Volumen
+    const volSlider = document.getElementById('volumeSliderAudacity');
+    if(volSlider) {
+        volSlider.addEventListener('input', (e) => audio.volume = e.target.value / 100);
+    }
+
+    // Visualizador (Solo si existe el contenedor)
     let animationId;
-
-    // Configurar Visualizador (Solo crear elementos DOM una vez)
-    const barCount = 40;
-    for (let i = 0; i < barCount; i++) {
-        const bar = document.createElement('div');
-        bar.className = 'visualizer-bar';
-        bar.style.left = `${(i / barCount) * 100}%`;
-        visualizer.appendChild(bar);
-    }
-    const bars = document.querySelectorAll('.visualizer-bar');
-
-    function animateVisualizer() {
-        bars.forEach(bar => {
-            // Simulación de frecuencias (En un caso real usaríamos Web Audio API AnalyserNode)
-            const height = 10 + Math.random() * 80; 
-            bar.style.height = `${height}px`;
-        });
-        animationId = requestAnimationFrame(animateVisualizer);
-    }
-
-    playBtn.addEventListener('click', () => {
-        if (audio.paused) {
-            audio.play()
-                .then(() => {
-                    playBtn.textContent = '⏸';
-                    animateVisualizer();
-                })
-                .catch(err => console.error("Error reproducción:", err));
-        } else {
-            audio.pause();
-            playBtn.textContent = '▶';
-            cancelAnimationFrame(animationId);
+    if (visualizer) {
+        // Crear barras
+        visualizer.innerHTML = '';
+        const bars = [];
+        const barCount = window.innerWidth < 600 ? 20 : 50;
+        
+        for (let i = 0; i < barCount; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'visualizer-bar';
+            bar.style.left = `${(i / barCount) * 100}%`;
+            bar.style.width = `${100/barCount - 0.5}%`; // Ancho dinámico
+            visualizer.appendChild(bar);
+            bars.push(bar);
         }
-    });
 
-    volumeSlider.addEventListener('input', (e) => audio.volume = e.target.value / 100);
+        function animate() {
+            if(audio.paused) return;
+            bars.forEach(bar => {
+                const h = 10 + Math.random() * 90;
+                bar.style.height = `${h}%`;
+            });
+            animationId = requestAnimationFrame(animate);
+        }
 
-    audio.addEventListener('timeupdate', () => {
-        currentEl.textContent = formatTime(audio.currentTime);
-        if(audio.duration) totalEl.textContent = formatTime(audio.duration);
-    });
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playBtn.textContent = '⏸';
+                    animate();
+                }).catch(e => console.error("Error audio:", e));
+            } else {
+                audio.pause();
+                playBtn.textContent = '▶';
+                cancelAnimationFrame(animationId);
+            }
+        });
+    }
 }
 
-function formatTime(seconds) {
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m}:${s < 10 ? '0' : ''}${s}`;
-}
-
-/* =========================================
-   MODAL SYSTEM (Unified)
-   ========================================= */
 function initModals() {
     const modal = document.getElementById('genericModal');
     const modalBody = document.getElementById('modalBodyContent');
     const closeBtn = document.getElementById('closeModalBtn');
+
+    if (!modal || !modalBody || !closeBtn) return;
 
     function openModal(contentHTML) {
         modalBody.innerHTML = contentHTML;
@@ -206,17 +205,14 @@ function initModals() {
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = 'auto';
-        modalBody.innerHTML = ''; // Limpiar memoria
+        modalBody.innerHTML = '';
     }
 
-    // Event Listeners para cerrar
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-    // Delegación de eventos para abrir modales (Team & Portfolio)
     document.addEventListener('click', (e) => {
-        // Caso 1: Click en Integrante
         const teamCard = e.target.closest('.team-member');
         if (teamCard) {
             const id = teamCard.dataset.id;
@@ -224,7 +220,6 @@ function initModals() {
             if (data) renderTeamModal(data, openModal);
         }
 
-        // Caso 2: Click en Portafolio
         const projectCard = e.target.closest('.portfolio-item');
         if (projectCard) {
             const id = projectCard.dataset.projectId;
@@ -234,7 +229,6 @@ function initModals() {
     });
 }
 
-// Renderizado HTML para Modal de Equipo
 function renderTeamModal(data, openFn) {
     const html = `
         <div class="team-modal-header">
@@ -258,7 +252,6 @@ function renderTeamModal(data, openFn) {
     openFn(html);
 }
 
-// Renderizado HTML para Modal de Proyecto
 function renderProjectModal(data, openFn) {
     const html = `
         <h2>${data.title}</h2>
@@ -274,42 +267,22 @@ function renderProjectModal(data, openFn) {
     openFn(html);
 }
 
-/* =========================================
-   ANIMATIONS & UTILS
-   ========================================= */
 function initAnimations() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in-up'); // Clase CSS recomendada en lugar de estilos inline
+                entry.target.classList.add('fade-in-up');
                 observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.1 });
 
     document.querySelectorAll('section').forEach(sec => {
-        sec.classList.add('hidden-section'); // Clase inicial
+        sec.classList.add('hidden-section');
         observer.observe(sec);
     });
 }
 
-/**
- * BodrioScript.js - Lógica Centralizada y Profesional
- */
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Detectar página actual
-    const isAudacityPage = document.querySelector('.page-audacity');
-    const isFilmoraPage = document.querySelector('.page-filmora');
-    
-    if (isAudacityPage) initAudacityPlayer();
-    if (isFilmoraPage) initFilmoraPlayer();
-    
-    // Inicializar navegación si existe (para Index y Subpáginas)
-    initNavigation(); 
-});
-
-// --- Lógica Audacity (Reproductor y Visualizador) ---
 function initAudacityPlayer() {
     const playBtn = document.getElementById('playButtonAudacity');
     const volumeSlider = document.getElementById('volumeSliderAudacity');
@@ -319,12 +292,10 @@ function initAudacityPlayer() {
     
     if (!playBtn) return;
 
-    // Audio Object
     const audio = new Audio('../Audio/Proyecto_Radio.mp3');
     audio.loop = true;
     audio.volume = 0.5;
 
-    // Crear barras del visualizador
     const bars = [];
     for (let i = 0; i < 40; i++) {
         const bar = document.createElement('div');
@@ -336,7 +307,6 @@ function initAudacityPlayer() {
     let animationId;
     function animate() {
         bars.forEach(bar => {
-            // Simulación de onda simple
             const height = Math.max(5, Math.random() * 100);
             bar.style.height = `${height}%`;
         });
@@ -352,30 +322,28 @@ function initAudacityPlayer() {
             audio.pause();
             playBtn.textContent = '▶';
             cancelAnimationFrame(animationId);
-            // Reset visualizer
             bars.forEach(b => b.style.height = '5px'); 
         }
     });
 
     volumeSlider.addEventListener('input', (e) => audio.volume = e.target.value / 100);
     audio.addEventListener('timeupdate', () => {
-        currentEl.textContent = formatTime(audio.currentTime);
-        if(audio.duration) totalEl.textContent = formatTime(audio.duration);
+        if (currentEl) currentEl.textContent = formatTime(audio.currentTime);
+        if (totalEl && audio.duration) totalEl.textContent = formatTime(audio.duration);
     });
 }
 
-// --- Lógica Filmora (Vimeo SDK) ---
 function initFilmoraPlayer() {
-    // Verificamos que el SDK de Vimeo esté cargado
     if (typeof Vimeo === 'undefined') {
         console.warn('Vimeo SDK no cargado.');
         return;
     }
 
     const iframe = document.getElementById('filmoraVideo');
+    if (!iframe) return;
+    
     const player = new Vimeo.Player(iframe);
 
-    // Botones
     const btnPlay = document.getElementById('btnVideoPlay');
     const btnMute = document.getElementById('btnVideoMute');
     const btnFull = document.getElementById('btnVideoFull');
@@ -387,7 +355,6 @@ function initFilmoraPlayer() {
             });
         });
         
-        // Actualizar icono al cambiar estado
         player.on('play', () => btnPlay.innerHTML = '<i class="fas fa-pause"></i> <span>Pause</span>');
         player.on('pause', () => btnPlay.innerHTML = '<i class="fas fa-play"></i> <span>Play</span>');
     }
@@ -410,14 +377,8 @@ function initFilmoraPlayer() {
     }
 }
 
-// --- Utilidades ---
 function formatTime(seconds) {
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
     return `${m}:${s < 10 ? '0' : ''}${s}`;
-}
-
-function initNavigation() {
-    // Lógica del menú hamburguesa (reutilizada del paso anterior)
-    // Asegurar que funcione tanto en root como en subcarpetas
 }
